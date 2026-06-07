@@ -18,3 +18,5 @@ This is the **first** of two composable skills. It reads a Figma node via the Fi
 ## Use it
 
 Share a `figma.com/...node-id=...` URL or say "implement this Figma component", "extract the Figma values", or "match the Figma". See [`SKILL.md`](SKILL.md) for the full workflow and [`examples/worked-example.md`](examples/worked-example.md) for a concrete run.
+
+> **Tip:** Figma recommends locking the workflow in by adding a `# Figma MCP` rules block to your project's agent rules (`CLAUDE.md` / `AGENTS.md`) — see [Figma's custom-rules docs](https://developers.figma.com/docs/figma-mcp-server/add-custom-rules/).

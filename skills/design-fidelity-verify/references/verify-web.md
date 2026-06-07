@@ -63,3 +63,17 @@ If JS-eval is blocked (CSP, no devtools access), you can still measure **placeme
 ## Map back to source
 
 Use the element's stable selector / `data-*` attribute / component name to jump from an on-screen discrepancy to the `file:line` that renders it. Many browser MCPs expose the DOM node's source; otherwise grep the component by its text/test id.
+
+## Bonus — structural check with ARIA snapshots
+
+Before (or alongside) the per-property numeric pass, a cheap structural assertion catches "wrong element / wrong order / missing label" fast and stays stable across layout refactors. With Playwright:
+
+```js
+await expect(page.locator('[data-testid="pricing-card"]')).toMatchAriaSnapshot(`
+  - heading "Pro" [level=3]
+  - text: /\\$\\d+/
+  - button "Choose Pro"
+`);
+```
+
+It verifies role / name / order / hierarchy, not pixels — complementary to the computed-style diff, and a natural extension of mapping elements to code (B3).

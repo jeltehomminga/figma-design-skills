@@ -19,3 +19,5 @@ The two reference files are loaded **on demand** — a web project never pulls t
 ## Use it
 
 Say "verify the design", "is this pixel-perfect", "check this against Figma", or run it right after building a screen with `figma-design-extract`. See [`SKILL.md`](SKILL.md) for the loop and [`examples/worked-example.md`](examples/worked-example.md) for a web + mobile run.
+
+> **Complementary, not a replacement for visual regression.** The numeric pass verifies a *first build* (no baseline exists yet); for *ongoing* protection, snapshot the approved render as a baseline for a visual-regression tool (Playwright `toHaveScreenshot`, Chromatic, Percy, Applitools). A cheap structural check — Playwright `toMatchAriaSnapshot` (role/name/order) — pairs well with the element-mapping step.

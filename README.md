@@ -52,6 +52,16 @@ The skills name specific tools (Tailwind, NativeWind, Restyle, Playwright, Argen
 - Fidelity is **measured** (computed styles / native props), never eyeballed from a screenshot.
 - Adapt the token syntax and the device tooling to whatever your repo already uses.
 
+## Background — why measured fidelity (and where it's debated)
+
+This approach reflects current Figma guidance and practitioner consensus, with the honest caveats:
+
+- **Tokens/variables are the source of truth.** Figma: *"Figma knows which specific token is used, and can provide the name of that variable to the LLM."* ([Figma blog](https://www.figma.com/blog/introducing-figma-mcp-server/)). Reuse via Code Connect is *"the #1 way to get consistent component reuse."*
+- **Don't measure from a screenshot.** Vision-language models are measurably weak at fine-grained pixel distances ([spatial-reasoning survey](https://arxiv.org/pdf/2510.25760)), so exact values come from structured data and the running app is *measured*, not eyeballed. The blind spot this closes is real — AI *"has no visibility into the final, rendered output of its own code"* ([Builder.io](https://www.builder.io/blog/figma-mcp-server)).
+- **Bounded loop.** Self-correcting agents saturate fast: *"beyond the third attempt, new plans recycle prior tool sequences"* ([study](https://arxiv.org/pdf/2601.11637)) — hence the ~3-iteration cap.
+- **"Pixel-perfect" is contested framing.** A credible camp argues the term is meaningless/harmful and the real goal is *"intentional fidelity to design decisions"* ([Smashing Magazine](https://www.smashingmagazine.com/2026/01/rethinking-pixel-perfect-web-design/), [Josh Comeau](https://www.joshwcomeau.com/css/pixel-perfection/)). These skills keep "pixel-perfect" only as a trigger phrase; the pass/fail unit is the **token**, not the literal pixel.
+- **Complement, don't replace, visual regression.** Computed-style diffing verifies a *first build* (no baseline exists yet); tools like Chromatic / Percy / Applitools / Playwright `toHaveScreenshot` catch *ongoing* regressions. Use both.
+
 ## License
 
 [MIT](LICENSE) © Jelte Homminga

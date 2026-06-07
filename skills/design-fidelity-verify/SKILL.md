@@ -1,12 +1,12 @@
 ---
 name: design-fidelity-verify
-description: Prove a running app actually matches its design spec by measuring rendered values, not by glancing at a screenshot. Use whenever the user says "verify the design", "is this pixel-perfect", "check this against Figma", "does the app match the design", "design QA this screen", or right after building a screen with figma-design-extract. Runs a bounded vision plus numeric feedback loop (about 3 iterations) for BOTH web and mobile. Web - read computed styles with getComputedStyle and getBoundingClientRect via a browser or Playwright MCP. Mobile - read native view props such as backgroundColor, bounds, cornerRadius and font via Argent or a similar device tool, captured at scale 1.0. Walks every spec-table row to PASS or FAIL with a delta, records navigation as a repeatable flow, and reports residuals honestly. Tool-agnostic - the measured method matters, not the specific MCP. Upstream step - figma-design-extract produces the spec table this consumes.
+description: Prove a running app matches its design spec by measuring rendered values, not eyeballing a screenshot. Use when the user says "verify the design", "is this pixel-perfect", "check against Figma", "does the app match the design", "design QA", or after building with figma-design-extract. Runs a bounded vision+numeric loop (about 3 iterations) for web and mobile: web reads getComputedStyle and getBoundingClientRect via a browser/Playwright MCP; mobile reads native view props (color, bounds, cornerRadius, font) via Argent or similar at scale 1.0. Walks every spec row to PASS/FAIL plus delta, records a repeatable navigation flow, and reports residuals honestly. Tool-agnostic. Consumes the figma-design-extract spec table.
 license: MIT
 ---
 
 # Design Fidelity Verify — prove the running app matches the spec
 
-"Looks done" is not a check. This skill runs a **measured feedback loop**: render → capture → read the *actually rendered* values off the live app → compare each against the design spec → fix → re-verify, bounded. The numeric pass is the whole point — it catches what the eye and a screenshot cannot.
+"Looks done" is not a check. This skill runs a **measured feedback loop**: render → capture → read the *actually rendered* values off the live app → compare each against the design spec → fix → re-verify, bounded. The numeric pass is the whole point — it catches what the eye and a screenshot cannot. The bar is **spec fidelity** — every value resolves to its intended token, within tolerance — not literal "pixel-perfect" (a phrase that means little across devices); measure tokens and deltas, don't chase byte-identical pixels.
 
 ## Upstream: the spec table
 
@@ -25,7 +25,7 @@ Trigger phrases: "verify the design", "is this pixel-perfect", "check against Fi
 
 ## Pick your backend (then load the matching reference)
 
-The loop below is **identical for web and mobile**. Only two steps differ — how you capture full-res, and how you read rendered values. Load the one reference file for your platform; ignore the other.
+The loop below is **identical for web and mobile**. Only two steps differ — how you capture full-res, and how you read rendered values. **Read the one reference file for your platform before the numeric pass (B5)**; ignore the other.
 
 | Platform | Capture + measure mechanics | Reference to load |
 |----------|-----------------------------|-------------------|
@@ -68,7 +68,7 @@ Place the app capture beside the Figma reference (`get_screenshot` from the extr
 
 ### B5. Numeric pass (the rigor)
 
-Read the **actually rendered** values off the live app and compare each against the spec table. This is platform-specific — see your reference file — but the discipline is the same:
+Read the **actually rendered** values off the live app and compare each against the spec table. **Read your platform's reference file now** (`references/verify-web.md` or `references/verify-mobile.md`) for the exact calls — the discipline is the same:
 
 - Pull the rendered value (computed style on web; native view prop on mobile).
 - **Walk every row** of the spec table: spec value vs measured value → **PASS / FAIL + delta**.
@@ -86,11 +86,15 @@ Title    | weight   | 600      | 400      | -200    | high
 
 ### B7. Fix + re-verify (bounded)
 
-Fix highest-severity first → replay the recorded flow → re-capture → re-run the numeric pass. **Hard cap: ~3 iterations.** Then stop and report what remains. Unbounded loops cause context rot and undo-fixes.
+Fix highest-severity first → replay the recorded flow → re-capture → re-run the numeric pass. Tokenize every value you touch while fixing — never paste a raw hex/px to "make it match"; that just reintroduces drift. **Hard cap: ~3 iterations.** Then stop and report what remains. Unbounded loops cause context rot and undo-fixes.
 
 ### B8. Optional clean-context review
 
 For a high-stakes screen, spawn a fresh review subagent to run B4–B6 without the implementer's bias.
+
+### B9. Optional — lock in a regression baseline
+
+The numeric pass proves a **first build** matches the spec; visual-regression tools can't do that (they need a prior approved render to diff against). Once it passes, snapshot the screen as that baseline so a VR tool (Playwright `toHaveScreenshot`, Chromatic, Percy, Applitools) catches *future* regressions the one-shot numeric pass won't. Complementary: numeric diff for first-build conformance, VR for ongoing protection.
 
 ---
 
