@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "figma-design-skills",
+  "description": "Design-to-code fidelity skills: extract exact specs from Figma, then prove the running app matches.",
+  "owner": {
+    "name": "Jelte Homminga",
+    "url": "https://github.com/jeltehomminga"
+  },
+  "plugins": [
+    {
+      "name": "figma-design-skills",
+      "description": "Extract exact design specs from Figma, then verify the running web or mobile app matches them - measured, not eyeballed.",
+      "source": "./",
+      "category": "design"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "skill_name": "design-fidelity-verify",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Verify my pricing page matches the Figma spec — is it pixel-perfect?",
+      "expected_output": "The skill runs the bounded vision + numeric loop on web, reading computed styles and walking every spec row to PASS/FAIL with deltas.",
+      "expectations": [
+        "The skill loads the web reference and reads rendered values via getComputedStyle and getBoundingClientRect",
+        "It captures the screen at full resolution (devicePixelRatio >= 2) before measuring",
+        "It walks every design-spec row producing PASS or FAIL with a numeric delta",
+        "Computed rgb()/rgba() colors are normalized before comparing to the spec hex",
+        "The fix-and-re-verify loop is bounded to about 3 iterations",
+        "It does not claim the design matches based on the vision pass alone"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I built this screen in our React Native app from the Figma spec. Does the running app actually match the design?",
+      "expected_output": "The skill runs the loop on mobile, capturing at scale 1.0 and reading native view props, degrading gracefully with honest residuals if native introspection is unavailable.",
+      "expectations": [
+        "The skill loads the mobile reference and captures at scale 1.0 rather than the blurry default",
+        "It attempts to read native view props (backgroundColor, bounds, cornerRadius, font) via Argent or a similar device tool",
+        "It records the navigation to the screen as a replayable flow",
+        "When native paint introspection is unavailable, it still measures placement/sizing from the view tree and records hex/cornerRadius/font as an explicit residual",
+        "It walks the spec rows to PASS/FAIL + delta and does not overclaim a full numeric pass when a channel was blocked"
+      ]
+    }
+  ]
+}

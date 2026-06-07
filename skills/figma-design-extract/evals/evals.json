@@ -1,0 +1,30 @@
+{
+  "skill_name": "figma-design-extract",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Implement this Figma component in our React app: https://www.figma.com/design/AbC123/Marketing?node-id=210-540",
+      "expected_output": "The skill triggers, reads structured Figma values via the MCP, and produces a design-spec table before writing component code.",
+      "expectations": [
+        "The skill is invoked from the figma.com node URL without the user naming it",
+        "It calls get_variable_defs for tokens and get_metadata for sizes/positions",
+        "It uses get_design_context for structure only and get_screenshot as visual reference only",
+        "It produces a design-spec table with columns: element, property, Figma exact value, repo token/class, source component",
+        "It does not measure any value from the screenshot",
+        "Bound Figma variables are mapped to repo token names rather than hardcoded literals"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "What are the exact colors and spacing in this Figma frame, and how do they map to our design tokens? https://www.figma.com/design/AbC123/Marketing?node-id=210-540",
+      "expected_output": "The skill returns exact token-backed values, mapping each to the repo's tokens and flagging anything unbound or drifted.",
+      "expectations": [
+        "get_variable_defs is treated as the source of truth for colors and spacing",
+        "Each value is mapped to a named repo token rather than a raw hex or px literal",
+        "A value with no bound Figma variable is flagged as a design smell, not silently hardcoded",
+        "Any Figma-to-token value mismatch is described as drift to log, not hardcoded to 'fix'",
+        "Every Figma call is scoped to the specific node id"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+# Claude Code local session state (worktrees, plan files)
+.claude/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+
+# Node (in case examples ever grow tooling)
+node_modules/
+
+# Skill packaging artifacts
+*.skill
