@@ -2,6 +2,7 @@
 name: figma-design-extract
 description: Extract exact design values from a Figma node into a build-ready spec table, instead of eyeballing a screenshot. Use when the user shares a figma.com node URL, or says "implement this Figma design", "build this component from Figma", "extract the Figma values", or "match the Figma". Reads structured data via the Figma MCP - get_design_context (structure), get_variable_defs (tokens, the source of truth), get_metadata (sizes), get_screenshot (visual reference only, never measured). Maps each Figma variable to your repo's own design tokens, reuses existing components, and logs token drift instead of hardcoding. Produces the spec table that design-fidelity-verify consumes. Stack-agnostic; Tailwind/NativeWind/Restyle/CSS-vars are examples to adapt.
 license: MIT
+compatibility: Portable markdown body usable in any MCP-capable agent. Native skill in Claude Code and OpenAI Codex (.agents/skills); adapt to Cursor rules or Copilot instructions per the repo README.
 ---
 
 # Figma Design Extract — get the real design out of Figma

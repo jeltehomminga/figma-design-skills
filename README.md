@@ -1,6 +1,6 @@
 # figma-design-skills
 
-Two composable [Claude Code](https://code.claude.com) skills for **design-to-code fidelity** — get the real design out of Figma, then prove the running app actually matches it.
+Two composable, tool-agnostic skills for **design-to-code fidelity** — get the real design out of Figma, then prove the running app actually matches it. Packaged as a [Claude Code](https://code.claude.com) plugin, and usable in **OpenAI Codex, Cursor, GitHub Copilot**, and any agent that reads `AGENTS.md` — see [Use with other agents](#use-with-other-agents).
 
 Most "is it pixel-perfect?" checks fail the same two ways: the design is read off a **screenshot** (so a 4px gap or a 600→400 weight slips through), and "looks done" is treated as a **check** (no measured feedback loop). These skills fix both — one extracts exact values, the other verifies them by measurement.
 
@@ -36,9 +36,68 @@ They compose: `figma-design-extract` produces the spec table; `design-fidelity-v
 
 Both skills load on demand from their trigger phrases (e.g. a `figma.com` URL, or "verify the design"). You can also clone this repo and drop either `skills/<name>/` folder into your `~/.claude/skills/` (personal) or `.claude/skills/` (project).
 
+## Use with other agents
+
+> Cursor · OpenAI Codex · GitHub Copilot · Gemini CLI · Aider · Zed · and any agent that reads `AGENTS.md`.
+
+The SKILL.md **bodies are plain, tool-neutral markdown** — the only Claude-specific part is auto-triggering via the `description`. To use a skill elsewhere, wire its body into your tool's instruction format. Every tool below speaks **MCP**, so the Figma / Playwright / Argent references work once you've configured those servers in that tool.
+
+### Any tool — `AGENTS.md` (broadest reach)
+
+This repo ships a root [`AGENTS.md`](AGENTS.md) that summarizes both skills and points to the full bodies. Tools that read `AGENTS.md` — Codex, Cursor, Copilot's coding agent, Gemini CLI, Aider, Jules, Zed, Windsurf, and 20+ others — pick it up automatically. Copy it (or the relevant parts) into your own project's `AGENTS.md`. *(VS Code Copilot: enable the `chat.useAgentsMdFile` setting.)*
+
+### OpenAI Codex — native skills
+
+Codex reads the **same `SKILL.md` format** from `.agents/skills/`. From your project:
+
+```bash
+mkdir -p .agents/skills
+cp -r path/to/figma-design-skills/skills/* .agents/skills/
+```
+
+Invoke with `/skills` or `$figma-design-extract`, or let Codex match on the `description`.
+
+### Cursor — project rule
+
+Cursor uses `.cursor/rules/*.mdc`. Create one per skill — paste the skill body under MDC frontmatter:
+
+```markdown
+---
+description: <paste the skill's description>
+alwaysApply: false
+---
+<paste the body of skills/figma-design-extract/SKILL.md>
+```
+
+Leave `globs` empty and `@`-mention it (`@figma-design-extract`), or set `globs: "**/*.tsx"` to auto-attach on relevant files.
+
+### GitHub Copilot — instructions file
+
+Create `.github/instructions/figma-design-extract.instructions.md`:
+
+```markdown
+---
+applyTo: "**"
+---
+<paste the body of the skill>
+```
+
+Honored in VS Code and by the Copilot cloud agent. For always-on guidance instead, append the body to `.github/copilot-instructions.md`.
+
+### Configure the MCP servers (per tool)
+
+The skills call MCP servers; each tool configures them separately:
+
+| Tool | MCP config |
+|------|-----------|
+| Claude Code | `.mcp.json` / `.claude/mcp.json` |
+| OpenAI Codex | `~/.codex/config.toml` — `[mcp_servers.<name>]` |
+| Cursor | `.cursor/mcp.json` |
+| GitHub Copilot | `.github/mcp.json` (Agent mode; root key `servers`) |
+
 ## Requirements
 
-- **Claude Code** (or any client that loads Agent Skills).
+- **An agent** — Claude Code, OpenAI Codex, Cursor, GitHub Copilot, or any MCP-capable coding agent (see [Use with other agents](#use-with-other-agents)).
 - **Figma MCP server** (Dev Mode MCP) — for `figma-design-extract`.
 - **App-driving tooling** — for `design-fidelity-verify`:
   - **Web:** a browser/Playwright/Chrome MCP that can run JS in the page and screenshot.
