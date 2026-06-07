@@ -1,6 +1,6 @@
 ---
 name: design-fidelity-verify
-description: Prove a running app matches its design spec by measuring rendered values, not eyeballing a screenshot. Use when the user says "verify the design", "is this pixel-perfect", "check against Figma", "does the app match the design", "design QA", or after building with figma-design-extract. Runs a bounded vision+numeric loop (about 3 iterations) for web and mobile: web reads getComputedStyle and getBoundingClientRect via a browser/Playwright MCP; mobile reads native view props (color, bounds, cornerRadius, font) via Argent or similar at scale 1.0. Walks every spec row to PASS/FAIL plus delta, records a repeatable navigation flow, and reports residuals honestly. Tool-agnostic. Consumes the figma-design-extract spec table.
+description: Prove a running app matches its design spec by measuring rendered values, not eyeballing a screenshot. Use when the user says "verify the design", "is this pixel-perfect", "check against Figma", "does the app match the design", "design QA", or after building with figma-design-extract. Runs a bounded vision+numeric loop (about 3 iterations) for web and mobile - web reads getComputedStyle and getBoundingClientRect via a browser/Playwright MCP; mobile reads native view props (color, bounds, cornerRadius, font) via Argent or similar at scale 1.0. Walks every spec row to PASS/FAIL plus delta, records a repeatable navigation flow, and reports residuals honestly. Tool-agnostic. Consumes the figma-design-extract spec table.
 license: MIT
 ---
 
