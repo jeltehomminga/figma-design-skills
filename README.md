@@ -36,11 +36,27 @@ They compose: `figma-design-extract` produces the spec table; `design-fidelity-v
 
 Both skills load on demand from their trigger phrases (e.g. a `figma.com` URL, or "verify the design"). You can also clone this repo and drop either `skills/<name>/` folder into your `~/.claude/skills/` (personal) or `.claude/skills/` (project).
 
+**Any agent, one command** — the [skills.sh](https://skills.sh) CLI installs these into the right place for Claude Code, Cursor, Codex, Copilot, Windsurf, Gemini, or Cline:
+
+```bash
+npx skills add jeltehomminga/figma-design-skills
+```
+
 ## Use with other agents
 
 > Cursor · OpenAI Codex · GitHub Copilot · Gemini CLI · Aider · Zed · and any agent that reads `AGENTS.md`.
 
 The SKILL.md **bodies are plain, tool-neutral markdown** — the only Claude-specific part is auto-triggering via the `description`. To use a skill elsewhere, wire its body into your tool's instruction format. Every tool below speaks **MCP**, so the Figma / Playwright / Argent references work once you've configured those servers in that tool.
+
+### Easiest — `npx skills add` (skills.sh)
+
+The [skills.sh](https://skills.sh) CLI installs these into the right format for whichever agent you use — Claude Code, Cursor, Codex, Copilot, Windsurf, Gemini, Cline:
+
+```bash
+npx skills add jeltehomminga/figma-design-skills
+```
+
+It discovers both skills from this repo's `skills/` layout and `.claude-plugin/` manifest automatically. The steps below are the manual fallback if you'd rather wire them in by hand.
 
 ### Any tool — `AGENTS.md` (broadest reach)
 
