@@ -24,7 +24,7 @@ Trigger phrases: "verify the design", "is this pixel-perfect", "check against Fi
 
 ---
 
-## Pick your backend (then load the matching reference)
+## Pick your platform (then load the matching reference)
 
 The loop below is **identical for web and mobile**. Only two steps differ — how you capture full-res, and how you read rendered values. **Read the one reference file for your platform before the numeric pass (B5)**; ignore the other.
 
